@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SignUpView: View {
     @StateObject var authViewModel = AuthViewModel()
+    @State private var name = ""
     @State private var email = ""
     @State private var password = ""
     @State private var errorMessage = ""
@@ -16,6 +17,10 @@ struct SignUpView: View {
     
     var body: some View {
         VStack {
+            TextField("Name", text: $name)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .autocapitalization(.none)
+            
             TextField("Email", text: $email)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .autocapitalization(.none)
@@ -24,7 +29,7 @@ struct SignUpView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
             
             Button("Sign Up") {
-                authViewModel.signUp(email: email, password: password)
+                authViewModel.signUp(email: email, password: password, name: name)
             }
             .padding()
             .background(Color.blue)

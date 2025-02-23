@@ -12,8 +12,6 @@ struct SignInView: View {
     @StateObject var authViewModel = AuthViewModel()
     @State private var email = ""
     @State private var password = ""
-    @State private var errorMessage = ""
-    @State private var isLoggedIn = false
     
 
     var body: some View {
@@ -33,15 +31,16 @@ struct SignInView: View {
             .foregroundColor(.white)
             .cornerRadius(10)
 
-            if !errorMessage.isEmpty {
+            if let errorMessage = authViewModel.errorMessage {
                 Text(errorMessage)
                     .foregroundColor(.red)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.gray)
-        .fullScreenCover(isPresented: $isLoggedIn) {
+        .fullScreenCover(isPresented: $authViewModel.isLoggedIn) {
             //HomeView() // TODO: create homeview
+            MainMenuView()
         }
     }
 }
