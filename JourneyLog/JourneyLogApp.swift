@@ -17,7 +17,7 @@ struct JourneyLogApp: App {
     
     var body: some Scene {
         WindowGroup {
-            MainMenuView()
+            PermissionsView()
         }
     }
 }

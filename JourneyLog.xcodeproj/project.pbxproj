@@ -34,9 +34,22 @@
 		558A410F2D696E7800A25FF8 /* JourneyLogUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JourneyLogUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		55EAD5692D6D816F00847E5B /* Exceptions for "JourneyLog" folder in "JourneyLog" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 558A40F42D696E7500A25FF8 /* JourneyLog */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		558A40F72D696E7500A25FF8 /* JourneyLog */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				55EAD5692D6D816F00847E5B /* Exceptions for "JourneyLog" folder in "JourneyLog" target */,
+			);
 			path = JourneyLog;
 			sourceTree = "<group>";
 		};
@@ -403,6 +416,11 @@
 				DEVELOPMENT_TEAM = J632998URR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = JourneyLog/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSCameraUsageDescription = "JourneyLog needs access to the camera to take pictures of your journey";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "JourneyLog needs access to your location to register the locations of your journey";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "JourneyLog needs access to the camera to save and display images of your journey";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -432,6 +450,11 @@
 				DEVELOPMENT_TEAM = J632998URR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = JourneyLog/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSCameraUsageDescription = "JourneyLog needs access to the camera to take pictures of your journey";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "JourneyLog needs access to your location to register the locations of your journey";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "JourneyLog needs access to the camera to save and display images of your journey";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
