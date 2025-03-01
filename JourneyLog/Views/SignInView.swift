@@ -9,10 +9,11 @@ import SwiftUI
 import FirebaseAuth
 
 struct SignInView: View {
-    @StateObject var authViewModel = AuthViewModel()
+    @StateObject var authViewModel = UserViewModel()
     @State private var email = ""
     @State private var password = ""
-    
+    @State private var isLoading = false
+    @State private var showSuccessMessage = false
 
     var body: some View {
         VStack {
@@ -23,24 +24,41 @@ struct SignInView: View {
             SecureField("Password", text: $password)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
 
-            Button("Sign In") {
-                authViewModel.signIn(email: email, password: password)
+            if isLoading {
+                ProgressView("Iniciando sesión...")
+            } else {
+                Button("Sign In") {
+                    isLoading = true
+                    authViewModel.signIn(email: email, password: password)
+                }
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(10)
             }
-            .padding()
-            .background(Color.blue)
-            .foregroundColor(.white)
-            .cornerRadius(10)
 
             if let errorMessage = authViewModel.errorMessage {
                 Text(errorMessage)
                     .foregroundColor(.red)
             }
+
+            if showSuccessMessage {
+                Text("Inicio de sesión exitoso!")
+                    .foregroundColor(.green)
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.gray)
+        .onChange(of: authViewModel.isLoggedIn) { newValue in
+            if newValue {
+                isLoading = false
+                showSuccessMessage = true
+            }
+        }
         .fullScreenCover(isPresented: $authViewModel.isLoggedIn) {
-            //HomeView() // TODO: create homeview
-            MainMenuView()
+            if let user = authViewModel.user {
+                HomeView(userViewModel: authViewModel, userId: user.id)
+            }
         }
     }
 }

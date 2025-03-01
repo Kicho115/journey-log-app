@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SignUpView: View {
-    @StateObject var authViewModel = AuthViewModel()
+    @StateObject var authViewModel = UserViewModel()
     @State private var name = ""
     @State private var email = ""
     @State private var password = ""
