@@ -1,13 +1,5 @@
-//
-//  HomeView.swift
-//  JourneyLog
-//
-//  Created by Oscar Angulo on 3/1/25.
-//
-
 import SwiftUI
 import FirebaseFirestore
-import MapKit
 
 struct HomeView: View {
     @ObservedObject var userViewModel: UserViewModel
@@ -16,47 +8,81 @@ struct HomeView: View {
     @State private var showError = false
     @State private var showingAddLogView = false
 
-    var body: some View {
-        NavigationView {
-            VStack {
-                if isLoading {
-                    ProgressView("Loading...")
-                } else if showError {
-                    Text("Error loading data. Try again.")
-                        .foregroundColor(.red)
-                        .padding()
-                    Button("Retry") {
-                        fetchData()
-                    }
-                } else if let user = userViewModel.user {
-                    Text("Welcome, \(user.name)")
-                        .font(.title)
+    let lightBrown = Color(red: 222/255, green: 184/255, blue: 135/255)
+    let darkBrown = Color(red: 139/255, green: 69/255, blue: 19/255)
 
-                    if !userViewModel.userLogs.isEmpty {
-                        List(userViewModel.userLogs) { log in
-                            LogRow(log: log)
-                        }
-                    } else {
-                        Text("No logs avaiable.")
-                            .foregroundColor(.gray)
-                    }
-                } else {
-                    Text("Fetching user data...")
-                        .onAppear {
+    var body: some View {
+        ZStack {
+            darkBrown.ignoresSafeArea()
+            
+            NavigationView {
+                VStack {
+                    if isLoading {
+                        ProgressView("Loading...")
+                            .foregroundColor(.white)
+                    } else if showError {
+                        Text("Error loading data. Try again.")
+                            .foregroundColor(.red)
+                            .padding()
+                        Button("Retry") {
                             fetchData()
                         }
+                        .padding(10)
+                        .background(lightBrown)
+                        .foregroundColor(.black)
+                        .cornerRadius(8)
+                    } else if let user = userViewModel.user {
+                        Text("Welcome, \(user.name)")
+                            .font(.title)
+                            .padding(10)
+                            .background(lightBrown)
+                            .foregroundColor(.black)
+                            .cornerRadius(8)
+                            
+                        
+                        if !userViewModel.userLogs.isEmpty {
+                            List(userViewModel.userLogs) { log in
+                                LogRow(log: log)
+                                    .listRowBackground(lightBrown)
+                            }
+                            .scrollContentBackground(.hidden)
+                            .background(darkBrown)
+                        } else {
+                            Text("No logs available.")
+                                .foregroundColor(.gray)
+                        }
+                    } else {
+                        Text("Fetching user data...")
+                            .foregroundColor(.white)
+                            .onAppear {
+                                fetchData()
+                            }
+                    }
                 }
-            }
-            .toolbar {
-                Button("Sign Out"){
-                    userViewModel.signOut()
+                .background(lightBrown)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button("Sign Out") {
+                            userViewModel.signOut()
+                        }
+                        .padding(6)
+                        .background(darkBrown)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Add Log") {
+                            showingAddLogView = true
+                        }
+                        .padding(6)
+                        .background(darkBrown)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                    }
                 }
-                Button("Add Log") {
-                    showingAddLogView = true
+                .sheet(isPresented: $showingAddLogView) {
+                    AddLogView(userViewModel: userViewModel)
                 }
-            }
-            .sheet(isPresented: $showingAddLogView) {
-                AddLogView(userViewModel: userViewModel)
             }
         }
     }
@@ -70,38 +96,6 @@ struct HomeView: View {
                 showError = true
             }
         }
-    }
-}
-
-struct LogRow: View {
-    let log: Log
-
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text(log.title)
-                .font(.headline)
-            Text(log.description)
-                .font(.subheadline)
-            if let location = log.location {
-                HStack {
-                    Text("Lat: \(location.latitude), Lon: \(location.longitude)")
-                        .font(.caption)
-                    Button(action: {
-                        openMaps(location: location)
-                    }, label: {
-                        Image(systemName: "map")
-                    })
-                }
-
-            }
-        }
-    }
-
-    func openMaps(location: GeoPoint) {
-        let coordinate = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
-        let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: coordinate))
-        mapItem.name = log.title
-        mapItem.openInMaps()
     }
 }
 
