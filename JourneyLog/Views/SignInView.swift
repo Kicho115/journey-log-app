@@ -25,7 +25,7 @@ struct SignInView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
 
             if isLoading {
-                ProgressView("Iniciando sesión...")
+                ProgressView("Signing in...")
             } else {
                 Button("Sign In") {
                     isLoading = true
@@ -42,10 +42,6 @@ struct SignInView: View {
                     .foregroundColor(.red)
             }
 
-            if showSuccessMessage {
-                Text("Inicio de sesión exitoso!")
-                    .foregroundColor(.green)
-            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.gray)

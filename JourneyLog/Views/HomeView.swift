@@ -14,21 +14,22 @@ struct HomeView: View {
     let userId: String
     @State private var isLoading = false
     @State private var showError = false
+    @State private var showingAddLogView = false
 
     var body: some View {
         NavigationView {
             VStack {
                 if isLoading {
-                    ProgressView("Cargando...")
+                    ProgressView("Loading...")
                 } else if showError {
-                    Text("Error al cargar los datos. Inténtalo de nuevo.")
+                    Text("Error loading data. Try again.")
                         .foregroundColor(.red)
                         .padding()
-                    Button("Reintentar") {
+                    Button("Retry") {
                         fetchData()
                     }
                 } else if let user = userViewModel.user {
-                    Text("Bienvenido, \(user.name)")
+                    Text("Welcome, \(user.name)")
                         .font(.title)
 
                     if !userViewModel.userLogs.isEmpty {
@@ -36,21 +37,26 @@ struct HomeView: View {
                             LogRow(log: log)
                         }
                     } else {
-                        Text("No hay logs disponibles.")
+                        Text("No logs avaiable.")
                             .foregroundColor(.gray)
                     }
                 } else {
-                    Text("Cargando datos del usuario...")
+                    Text("Fetching user data...")
                         .onAppear {
                             fetchData()
                         }
                 }
             }
-            .navigationTitle("Inicio")
             .toolbar {
-                Button("Cerrar Sesión"){
+                Button("Sign Out"){
                     userViewModel.signOut()
                 }
+                Button("Add Log") {
+                    showingAddLogView = true
+                }
+            }
+            .sheet(isPresented: $showingAddLogView) {
+                AddLogView(userViewModel: userViewModel)
             }
         }
     }

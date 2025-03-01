@@ -94,6 +94,38 @@ class UserViewModel: ObservableObject {
             self.isLoggedIn = false
         }
     }
+    
+    func addLog(title: String, description: String, imageUrl: String? = nil, location: GeoPoint? = nil, completion: ((Error?) -> Void)? = nil) {
+            guard let userId = Auth.auth().currentUser?.uid else {
+                completion?(NSError(domain: "Auth", code: -1, userInfo: [NSLocalizedDescriptionKey: "Usuario no autenticado"]))
+                return
+            }
+
+            guard !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+                  !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                completion?(NSError(domain: "Validation", code: -2, userInfo: [NSLocalizedDescriptionKey: "Título y descripción no pueden estar vacíos"]))
+                return
+            }
+
+            let logData: [String: Any] = [
+                "title": title,
+                "description": description,
+                "imageUrl": imageUrl as Any,
+                "location": location as Any,
+                "createdAt": Timestamp(date: Date())
+            ]
+
+            db.collection("Users").document(userId).collection("Logs").addDocument(data: logData) { error in
+                if let error = error {
+                    print("Error adding log: \(error.localizedDescription)")
+                    completion?(error)
+                } else {
+                    print("Log added successfully")
+                    self.fetchUserLogs(userId: userId)
+                    completion?(nil)
+                }
+            }
+        }
 
     func signOut() {
         do {
